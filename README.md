@@ -1,7 +1,9 @@
 # ProjectAssignmentFS_5
 
-Team FS_5
+# Team FS_5
 
-Members:
-Jose Semaan 40244141
-Nour Hassoun 
+| Name | Student ID | Handle |
+| ---- | ---------- | ------ |
+| Jose Semaan | 40244141 | @jozesemaan |
+| Nour Hassoun | 40233077 | @NourHadieHassoun |
+
