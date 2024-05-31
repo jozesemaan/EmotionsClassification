@@ -1,4 +1,5 @@
 import os
+import random
 from PIL import Image
 import numpy as np
 import matplotlib.pyplot as plt
@@ -46,21 +47,26 @@ plt.tight_layout()
 plt.show()
 
 # Sample Images and Pixel Intensity Distribution for Each Class
-plt.figure(figsize=(15, 10))
 for i in unique:
-    # Sample Images
-    plt.subplot(2, 4, i+1)
-    sample_img_idx = np.where(y == i)[0][0]  # Get the index of the first image of the class
-    plt.imshow(X[sample_img_idx], cmap='gray')
-    plt.title(f'Sample Image - {class_names[i]}')
-    plt.axis('off')
+    class_indices = np.where(y == i)[0]
+    sample_indices = random.sample(list(class_indices), 15)  # Randomly select 15 samples
 
-    # Pixel Intensity Distribution for Sample Image
-    plt.subplot(2, 4, i+5)
-    plt.hist(X[sample_img_idx].ravel(), bins=256, color='green', alpha=0.7)
-    plt.title(f'Pixel Intensity - {class_names[i]} Sample Image')
-    plt.xlabel('Pixel Intensity')
-    plt.ylabel('Frequency')
+    fig, axes = plt.subplots(nrows=5, ncols=6, figsize=(20, 20))
+    fig.suptitle(f'Sample Images and Pixel Intensity Histograms - {class_names[i]}', fontsize=16)
 
-plt.tight_layout()
-plt.show()
+    for idx, sample_idx in enumerate(sample_indices):
+        row, col = divmod(idx, 3)
+
+        # Plot the sample image
+        axes[row, col * 2].imshow(X[sample_idx], cmap='gray')
+        axes[row, col * 2].set_title(f'{class_names[i]} Image {idx+1}')
+        axes[row, col * 2].axis('off')
+
+        # Plot the pixel intensity histogram
+        axes[row, col * 2 + 1].hist(X[sample_idx].ravel(), bins=256, color='green', alpha=0.7)
+        axes[row, col * 2 + 1].set_title(f'Pixel Intensity {idx+1}')
+        axes[row, col * 2 + 1].set_xlabel('Pixel Intensity')
+        axes[row, col * 2 + 1].set_ylabel('Frequency')
+
+    plt.tight_layout(rect=[0, 0.03, 1, 0.95])
+    plt.show()
