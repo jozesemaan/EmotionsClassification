@@ -24,3 +24,16 @@ Graphs are created for each category displaying the range of pixel values in the
 4-Examples of Images and Distribution of Pixel Intensity for Individual Class:
 15 random sample images are chosen for each class and their pixel intensity histograms are shown next to them.
 
+grayscale_image.py:
+1- Arrangement of Folders for Input and Output:
+The input_folder and output_folder variables indicate the locations of the input images and where the grayscale images will be stored, respectively.
+2- Function convert_to_grayscale:
+A function that changes an image to grayscale.
+Verifies the existence of the output folder and generates it if it is not present (os.makedirs(output_folder, exist_ok=True)).
+Obtains a directory of files in the specified input folder by using os.listdir(input_folder).
+3- Goes through every file in sequence:
+Uses cv2.imread to open and view the image.
+Uses cv2.cvtColor to change the image to grayscale.
+Stores the black and white image in the destination directory with cv2.imwrite.
+Displays a message of success for every image that has been converted.
+
