@@ -42,3 +42,16 @@ The raw string literal in Python is indicated by the r prefix in front of the di
 The script presupposes that there are precisely 528 PNG files in the designated folder. An error message will be displayed if there are a different number of files.
 The files are renamed in sequence as neutral1.png, neutral2.png, up to neutral528.png during the renaming process.
 
+resize_image.py:
+Parsing arguments is the process of analyzing input data to extract relevant information.
+The argparse module in the script is utilized for managing command-line arguments. The function requires two parameters: input_image (location of the original image) and output_image (location to store the resized image).
+Function to resize an image (resize_image):
+Use PIL.Image.open to access the input image.
+Displays the image's initial dimensions.
+Resizes the original image to a specified size of 48x48 pixels using the resize method.
+Displays the new size of the image.
+Resizes the image and saves it to the specified output path by calling resized_image.save(output_image).
+Primary Execution:
+Interprets the input parameters provided in the command line (input_image and output_image).
+Specifies the size to be (48, 48).
+Executes the resize_image function with the provided image path, destination image path, and specified size.
