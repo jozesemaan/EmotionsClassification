@@ -37,3 +37,8 @@ Uses cv2.cvtColor to change the image to grayscale.
 Stores the black and white image in the destination directory with cv2.imwrite.
 Displays a message of success for every image that has been converted.
 
+rename_images.py:
+The raw string literal in Python is indicated by the r prefix in front of the directory path (r"C:\Users\pierh\Downloads\fer2013\train\neutral_new"), and it helps to avoid the need for escaping backslashes.
+The script presupposes that there are precisely 528 PNG files in the designated folder. An error message will be displayed if there are a different number of files.
+The files are renamed in sequence as neutral1.png, neutral2.png, up to neutral528.png during the renaming process.
+
