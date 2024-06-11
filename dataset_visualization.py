@@ -4,7 +4,7 @@ from PIL import Image
 import numpy as np
 import matplotlib.pyplot as plt
 
-base_dir = r'C:\Users\jozes\Desktop\COMP472\Project\DataSetFinal'  
+base_dir = r'C:\Users\pierh\assignment1\ProjectAssignmentFS_5\fulldataset'  
 
 class_names = ['Angry', 'Happy', 'Neutral', 'Engaged']
 train_test_names = ['train', 'test']
