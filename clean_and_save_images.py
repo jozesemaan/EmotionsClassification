@@ -2,7 +2,7 @@ import os
 import cv2
 
 base_dir = r'C:\Users\pierh\assignment1\ProjectAssignmentFS_5\fulldataset'
-output_dir = r'C:\Users\pierh\assignment1\ProjectAssignmentFS_5\fulldataset_cleaned'
+output_dir = r'C:\Users\pierh\assignment1\ProjectAssignmentFS_5\data\fulldataset_cleaned'
 
 # Ensure the output directory exists
 os.makedirs(output_dir, exist_ok=True)
