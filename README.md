@@ -10,7 +10,7 @@
 
 Python Scripts:
 
-Data Visualization and Cleaning.py
+Data Visualization and Cleaning.py:
 
 This script is designed to organize a dataset of images into training, testing, and validation sets, and then visualize the distribution and characteristics of the images within these sets. The script performs the following key tasks:
 1.	Splits the dataset into training, testing, and validation sets.
@@ -18,36 +18,56 @@ This script is designed to organize a dataset of images into training, testing, 
 3.	Visualizes the class distribution of the images.
 4.	Generates pixel intensity histograms for each class.
 5.	Displays sample images and their pixel intensity distributions for each class.
+6.  Names the images properly and saves it in a new data/fulldataset_cleaned directory
+
+______________________
+All models folder     |
+______________________|
+Each folder contains one model with small differences in between:
+The main_model 
+
+train_model.py:
+
+Step 1: Define the SimpleCNN Architecture
+A simple CNN model is defined with the following layers:
+- Two convolutional layers with ReLU activation and MaxPooling.
+- Two fully connected layers with ReLU activation and Dropout.
+- Output layer with four classes.
+
+Step 2: Define Image Transformations
+- Images are transformed to grayscale, resized to 48x48 pixels, and converted to tensors for input into the model.
+
+Step 3: Define Custom Dataset Class
+A custom dataset class is defined to load images and their corresponding labels.
+
+Step 4: Load Datasets
+- The load_datasets function loads training and testing datasets from the specified directory.
+
+Step 5: Initialize Data Loaders
+DataLoader instances are created for the training and testing datasets with a batch size of 32.
+
+Step 6: Training Function with Early Stopping and Minimum Epochs
+- The train_model function trains the model using early stopping criteria:
+- Early Stopping: Stops training if the validation loss does not improve for a specified number of epochs (patience).
+- Minimum Epochs: Ensures the model is trained for at least a specified number of epochs (min_epochs).
+
+Step 7: Evaluation Function
+The evaluate_model function evaluates the model on a given dataset, printing performance metrics including accuracy, precision, recall, F1-score, and validation loss. It also displays the confusion matrix.
+
+Step 8: Initialize Model, Optimizer, and Loss Function
+- Model: An instance of SimpleCNN.
+- Criterion: CrossEntropyLoss.
+- Optimizer: Adam optimizer with a learning rate of 0.001.
+
+Step 9: Train the Model
+- The model is trained using the train_model function, with early stopping and minimum epochs specified.
 
 
-grayscale_image.py:
-1- Arrangement of Folders for Input and Output:
-The input_folder and output_folder variables indicate the locations of the input images and where the grayscale images will be stored, respectively.
-2- Function convert_to_grayscale:
-A function that changes an image to grayscale.
-Verifies the existence of the output folder and generates it if it is not present (os.makedirs(output_folder, exist_ok=True)).
-Obtains a directory of files in the specified input folder by using os.listdir(input_folder).
-3- Goes through every file in sequence:
-Uses cv2.imread to open and view the image.
-Uses cv2.cvtColor to change the image to grayscale.
-Stores the black and white image in the destination directory with cv2.imwrite.
-Displays a message of success for every image that has been converted.
+Evaluate_model.py: 
+The goal of this script is to evaluate the best_model.pth file on the validation set that was generated using the train_model.py, the train_model generates runs for a certain number of epochs, tests each one on the test set and then chooses the best_model.
+The evaluate_model takes that same best model and tests it on the validation set.
 
-rename_images.py:
-The raw string literal in Python is indicated by the r prefix in front of the directory path (r"C:\Users\pierh\Downloads\fer2013\train\neutral_new"), and it helps to avoid the need for escaping backslashes.
-The script presupposes that there are precisely 528 PNG files in the designated folder. An error message will be displayed if there are a different number of files.
-The files are renamed in sequence as neutral1.png, neutral2.png, up to neutral528.png during the renaming process.
 
-resize_image.py:
-Parsing arguments is the process of analyzing input data to extract relevant information.
-The argparse module in the script is utilized for managing command-line arguments. The function requires two parameters: input_image (location of the original image) and output_image (location to store the resized image).
-Function to resize an image (resize_image):
-Use PIL.Image.open to access the input image.
-Displays the image's initial dimensions.
-Resizes the original image to a specified size of 48x48 pixels using the resize method.
-Displays the new size of the image.
-Resizes the image and saves it to the specified output path by calling resized_image.save(output_image).
-Primary Execution:
-Interprets the input parameters provided in the command line (input_image and output_image).
-Specifies the size to be (48, 48).
-Executes the resize_image function with the provided image path, destination image path, and specified size.
+
+
+
