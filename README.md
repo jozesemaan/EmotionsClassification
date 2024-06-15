@@ -45,7 +45,7 @@ Step 2: Define Image Transformations
 - Images are transformed to grayscale, resized to 48x48 pixels, and converted to tensors for input into the model.
 
 Step 3: Define Custom Dataset Class
-A custom dataset class is defined to load images and their corresponding labels.
+- A custom dataset class is defined to load images and their corresponding labels.
 
 Step 4: Load Datasets
 - The load_datasets function loads training and testing datasets from the specified directory.
