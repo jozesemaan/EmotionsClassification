@@ -20,11 +20,16 @@ This script is designed to organize a dataset of images into training, testing, 
 5.	Displays sample images and their pixel intensity distributions for each class.
 6.  Names the images properly and saves it in a new data/fulldataset_cleaned directory
 
-______________________
-All models folder     |
-______________________|
+
+All models folder     
+
 Each folder contains one model with small differences in between:
-The main_model 
+
+Main Model: Original CNN Architecture (3x3 Kernel size and 2 convolutional layers)
+Variant 1: Added Convolutional Layer (3x3 kernel size and 3 convolutional layers)
+Variant 2: Changed Kernel Size in Convolutional Layers (5x5 kernel size and 2 convolutional layers)
+
+Each version contain a train_model.py and evaluate_model.py
 
 train_model.py:
 
