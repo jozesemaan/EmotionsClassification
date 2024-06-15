@@ -33,6 +33,8 @@ Each folder contains one model with small differences in between:
 
 Each version contain a train_model.py and evaluate_model.py
 
+
+- - - - - - - - - - - - - -- - - - -- - - -- - - - -- - - -- - - - -- 
 train_model.py:
 
 Step 1: Define the SimpleCNN Architecture
