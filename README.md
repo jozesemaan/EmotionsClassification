@@ -51,7 +51,7 @@ Step 4: Load Datasets
 - The load_datasets function loads training and testing datasets from the specified directory.
 
 Step 5: Initialize Data Loaders
-DataLoader instances are created for the training and testing datasets with a batch size of 32.
+- DataLoader instances are created for the training and testing datasets with a batch size of 32.
 
 Step 6: Training Function with Early Stopping and Minimum Epochs
 - The train_model function trains the model using early stopping criteria:
@@ -59,7 +59,7 @@ Step 6: Training Function with Early Stopping and Minimum Epochs
 - Minimum Epochs: Ensures the model is trained for at least a specified number of epochs (min_epochs).
 
 Step 7: Evaluation Function
-The evaluate_model function evaluates the model on a given dataset, printing performance metrics including accuracy, precision, recall, F1-score, and validation loss. It also displays the confusion matrix.
+- The evaluate_model function evaluates the model on a given dataset, printing performance metrics including accuracy, precision, recall, F1-score, and validation loss. It also displays the confusion matrix.
 
 Step 8: Initialize Model, Optimizer, and Loss Function
 - Model: An instance of SimpleCNN.
