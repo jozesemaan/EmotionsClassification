@@ -72,12 +72,15 @@ def load_datasets(data_dir):
     train_labels = []
     test_image_paths = []
     test_labels = []
+    validate_image_paths = []
+    validate_labels = []
     classes = ['Angry', 'Engaged', 'Happy', 'Neutral']
     class_to_idx = {cls: idx for idx, cls in enumerate(classes)}
 
     for cls in classes:
         train_dir = os.path.join(data_dir, cls, 'train')  # Corrected path here
         test_dir = os.path.join(data_dir, cls, 'test')    # Corrected path here
+        validate_dir = os.path.join(data_dir, cls, 'validate')    # Corrected path here
 
         # Check if directories exist
         if not os.path.exists(train_dir):
@@ -92,18 +95,26 @@ def load_datasets(data_dir):
             test_image_paths.extend([os.path.join(test_dir, img) for img in os.listdir(test_dir)])
             test_labels.extend([class_to_idx[cls]] * len(os.listdir(test_dir)))
 
+        if not os.path.exists(validate_dir):
+            print(f"Error: Validate directory '{validate_dir}' does not exist.")
+        else:
+            validate_image_paths.extend([os.path.join(validate_dir, img) for img in os.listdir(validate_dir)])
+            validate_labels.extend([class_to_idx[cls]] * len(os.listdir(validate_dir)))
+
     train_dataset = CustomDataset(train_image_paths, train_labels, transform=transform)
     test_dataset = CustomDataset(test_image_paths, test_labels, transform=transform)
+    validate_dataset = CustomDataset(validate_image_paths, validate_labels, transform=transform)
 
-    return train_dataset, test_dataset
+    return train_dataset, test_dataset, validate_dataset
 
 # Initialize model, criterion, optimizer, and datasets
 model = SimpleCNN()
 criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
-train_dataset, test_dataset = load_datasets(data_dir)
+train_dataset, test_dataset, validate_dataset = load_datasets(data_dir)
 train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
 test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False)
+validate_loader = DataLoader(validate_dataset, batch_size=32, shuffle=False)
 
 # Mapping of class indices to class names
 class_names = ['Angry', 'Engaged', 'Happy', 'Neutral']
@@ -118,14 +129,14 @@ def load_best_model(model, model_path):
         print(f"Error: Model weights not found at {model_path}")
 
 # Evaluation function
-def evaluate_model(model, test_loader, criterion):
+def evaluate_model(model, loader, criterion, dataset_name="Test"):
     model.eval()
     all_labels = []
     all_preds = []
     total_loss = 0.0
 
     with torch.no_grad():
-        for inputs, labels in test_loader:
+        for inputs, labels in loader:
             outputs = model(inputs)
             _, preds = torch.max(outputs, 1)
             all_labels.extend(labels.cpu().numpy())
@@ -136,13 +147,18 @@ def evaluate_model(model, test_loader, criterion):
     # Calculate metrics
     accuracy = accuracy_score(all_labels, all_preds)
     precision, recall, f1, _ = precision_recall_fscore_support(all_labels, all_preds, average='macro')
-        # Format metrics as a list
+    micro_precision, micro_recall, micro_f1, _ = precision_recall_fscore_support(all_labels, all_preds, average='micro')
+
+    # Format metrics as a list
     metrics_list = [
-        f'Accuracy: {accuracy:.4f}',
-        f'Precision: {precision:.4f}',
-        f'Recall: {recall:.4f}',
-        f'F1-score: {f1:.4f}',
-        f'Validation Loss: {total_loss / len(test_loader):.4f}'
+        f'{dataset_name} Accuracy: {accuracy:.4f}',
+        f'{dataset_name} Precision (Macro): {precision:.4f}',
+        f'{dataset_name} Recall (Macro): {recall:.4f}',
+        f'{dataset_name} F1-score (Macro): {f1:.4f}',
+        f'{dataset_name} Precision (Micro): {micro_precision:.4f}',
+        f'{dataset_name} Recall (Micro): {micro_recall:.4f}',
+        f'{dataset_name} F1-score (Micro): {micro_f1:.4f}',
+        f'{dataset_name} Loss: {total_loss / len(loader):.4f}'
     ]
 
     for metric in metrics_list:
@@ -152,7 +168,7 @@ def evaluate_model(model, test_loader, criterion):
     cm = confusion_matrix(all_labels, all_preds)
     plt.figure(figsize=(8, 6))
     plt.imshow(cm, interpolation='nearest', cmap=plt.cm.Blues)
-    plt.title('Confusion Matrix')
+    plt.title(f'{dataset_name} Confusion Matrix')
     plt.colorbar()
     tick_marks = np.arange(len(class_names))
     plt.xticks(tick_marks, class_names, rotation=45)
@@ -161,7 +177,7 @@ def evaluate_model(model, test_loader, criterion):
     plt.xlabel('Predicted label')
     plt.show()
 
-    return total_loss / len(test_loader)
+    return total_loss / len(loader)
 
 # Path to the best model
 best_model_path = r'C:\Users\pierh\assignment1\ProjectAssignmentFS_5\All models\main_model\best_model.pth'
@@ -169,5 +185,8 @@ best_model_path = r'C:\Users\pierh\assignment1\ProjectAssignmentFS_5\All models\
 # Load the best model
 load_best_model(model, best_model_path)
 
-# Evaluate the model
-evaluate_model(model, test_loader, criterion)
+# Evaluate on the validation set
+evaluate_model(model, validate_loader, criterion, dataset_name="Validation")
+
+# Evaluate on the test set
+evaluate_model(model, test_loader, criterion, dataset_name="Test")

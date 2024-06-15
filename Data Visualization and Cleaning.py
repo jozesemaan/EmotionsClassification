@@ -1,9 +1,9 @@
 import os
-import cv2
 import random
 from PIL import Image
 import numpy as np
 import matplotlib.pyplot as plt
+import shutil
 
 # Paths for dataset
 base_dir = r'C:\Users\pierh\assignment1\ProjectAssignmentFS_5\fulldataset'
@@ -12,52 +12,51 @@ output_dir = r'C:\Users\pierh\assignment1\ProjectAssignmentFS_5\data\fulldataset
 # Ensure the output directory exists
 os.makedirs(output_dir, exist_ok=True)
 
-# Function to get the proper filename
-def get_new_filename(class_name, train_test_name, idx):
-    return f'{class_name}_{train_test_name}_{idx}.png'
-
-# Step 1: Denoise images and save them to a new directory structure with proper renaming
-for class_name in os.listdir(base_dir):
-    class_path = os.path.join(base_dir, class_name)
-    class_output_path = os.path.join(output_dir, class_name)
-    os.makedirs(class_output_path, exist_ok=True)
-    
-    for train_test_name in os.listdir(class_path):
-        train_test_path = os.path.join(class_path, train_test_name)
-        train_test_output_path = os.path.join(class_output_path, train_test_name)
-        os.makedirs(train_test_output_path, exist_ok=True)
-        
-        # Initialize index for proper renaming
-        idx = 1
-        
-        for img_name in os.listdir(train_test_path):
-            img_path = os.path.join(train_test_path, img_name)
-            
-            # Read image using OpenCV
-            img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
-            
-            # Denoise image using Non-Local Means Denoising
-            denoised_img = cv2.fastNlMeansDenoising(img, h=10, templateWindowSize=7, searchWindowSize=21)
-            
-            # Construct path for cleaned image in output directory
-            new_img_name = get_new_filename(class_name, train_test_name, idx)
-            cleaned_img_path = os.path.join(train_test_output_path, new_img_name)
-            
-            # Save cleaned image
-            cv2.imwrite(cleaned_img_path, denoised_img)
-            
-            # Increment index for next image
-            idx += 1
-            
-print("Cleaning and saving images complete.")
-
-# Step 2: Load cleaned images and perform visualization
+# Step 1: Split images into train, test, and validate sets
 class_names = ['Angry', 'Happy', 'Neutral', 'Engaged']
-train_test_names = ['train', 'test']
+train_test_names = ['train', 'test', 'validate']
+train_pct = 0.7
+test_pct = 0.15
+validate_pct = 0.15
+min_train_images = 400
+
+for class_name in class_names:
+    class_path = os.path.join(base_dir, class_name)
+    output_class_path = os.path.join(output_dir, class_name)
+    os.makedirs(output_class_path, exist_ok=True)
+    
+    images = os.listdir(class_path)
+    num_images = len(images)
+    indices = list(range(num_images))
+    random.shuffle(indices)
+    
+    train_split = int(train_pct * num_images)
+    test_split = int(test_pct * num_images) + train_split
+    
+    if train_split < min_train_images:
+        train_split = min_train_images  # Ensure at least min_train_images in train set
+        test_split = int(test_pct * num_images) + train_split
+    
+    train_indices = indices[:train_split]
+    test_indices = indices[train_split:test_split]
+    validate_indices = indices[test_split:]
+    
+    # Create train, test, validate folders
+    for split, split_name in zip([train_indices, test_indices, validate_indices], train_test_names):
+        split_path = os.path.join(output_class_path, split_name)
+        os.makedirs(split_path, exist_ok=True)
+        
+        for i, img_idx in enumerate(split):
+            img_name = images[img_idx]
+            img_path_src = os.path.join(class_path, img_name)
+            img_path_dest = os.path.join(split_path, f'{class_name}_{split_name}_{i+1:02}.jpg')
+            shutil.copyfile(img_path_src, img_path_dest)
+            
+# Step 2: Load cleaned images and perform visualization
 X = []
 y = []
 
-# Iterate through each class and each train/test folder in the cleaned dataset
+# Iterate through each class and each train/test/validate folder in the cleaned dataset
 for class_name in class_names:
     class_path = os.path.join(output_dir, class_name)
     for train_test_name in train_test_names:

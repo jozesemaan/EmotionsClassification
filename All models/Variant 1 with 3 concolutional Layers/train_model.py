@@ -9,14 +9,14 @@ from sklearn.metrics import confusion_matrix, accuracy_score, precision_recall_f
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Define CNN Architecture
+# Define CNN Architecture with 3 convolutional layers
 class SimpleCNN(nn.Module):
     def __init__(self):
         super(SimpleCNN, self).__init__()
         self.conv1 = nn.Conv2d(1, 32, kernel_size=3, padding=1)
         self.conv2 = nn.Conv2d(32, 64, kernel_size=3, padding=1)
-        self.conv3 = nn.Conv2d(64, 128, kernel_size=3, padding=1)  # Third convolutional layer with 3x3 kernel size
-        self.fc1 = nn.Linear(128*6*6, 128)  # Adjust input size
+        self.conv3 = nn.Conv2d(64, 128, kernel_size=3, padding=1)
+        self.fc1 = nn.Linear(128*6*6, 128)
         self.fc2 = nn.Linear(128, 4)  # 4 classes: Angry, Engaged, Happy, Neutral
         self.pool = nn.MaxPool2d(2, 2)
         self.relu = nn.ReLU()
@@ -25,8 +25,8 @@ class SimpleCNN(nn.Module):
     def forward(self, x):
         x = self.pool(self.relu(self.conv1(x)))
         x = self.pool(self.relu(self.conv2(x)))
-        x = self.pool(self.relu(self.conv3(x)))  # Add the third convolutional layer
-        x = x.view(-1, 128*6*6)  # Adjust the flattened size
+        x = self.pool(self.relu(self.conv3(x)))
+        x = x.view(-1, 128*6*6)
         x = self.relu(self.fc1(x))
         x = self.dropout(x)
         x = self.fc2(x)
@@ -104,7 +104,7 @@ test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False)
 class_names = ['Angry', 'Engaged', 'Happy', 'Neutral']
 
 # Training function with Early Stopping and minimum epochs
-def train_model(model, train_loader, test_loader, criterion, optimizer, num_epochs=20, patience=3, min_epochs=10):
+def train_model(model, train_loader, val_loader, criterion, optimizer, num_epochs=20, patience=3, min_epochs=10):
     model.train()
     best_val_loss = float('inf')
     no_improvement_cnt = 0
@@ -131,9 +131,8 @@ def train_model(model, train_loader, test_loader, criterion, optimizer, num_epoc
         print(f'- Training Loss: {avg_train_loss:.4f}')
 
         # Validation
-        val_loss = evaluate_model(model, test_loader, criterion, num_epochs, epoch)  # Pass num_epochs and epoch here
+        val_loss = evaluate_model(model, val_loader, criterion)  # Pass val_loader here
         
-
         # Early stopping
         if val_loss < best_val_loss:
             best_val_loss = val_loss
@@ -155,7 +154,7 @@ def train_model(model, train_loader, test_loader, criterion, optimizer, num_epoc
     model.load_state_dict(torch.load(save_path))
 
 
-def evaluate_model(model, test_loader, criterion, num_epochs, epoch):  # Add num_epochs and epoch parameters
+def evaluate_model(model, test_loader, criterion):
     model.eval()
     all_labels = []
     all_preds = []
