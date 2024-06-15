@@ -69,9 +69,9 @@ Step 8: Initialize Model, Optimizer, and Loss Function
 Step 9: Train the Model
 - The model is trained using the train_model function, with early stopping and minimum epochs specified.
 
-
+- - - - - - - - - - - - - -- - - - -- - - -- - - - -- - - -- - - - -- 
 Evaluate_model.py: 
-The goal of this script is to evaluate the best_model.pth file on the validation set that was generated using the train_model.py, the train_model generates runs for a certain number of epochs, tests each one on the test set and then chooses the best_model.
+- The goal of this script is to evaluate the best_model.pth file on the validation set that was generated using the train_model.py, the train_model generates runs for a certain number of epochs, tests each one on the test set and then chooses the best_model.
 The evaluate_model takes that same best model and tests it on the validation set.
 
 
