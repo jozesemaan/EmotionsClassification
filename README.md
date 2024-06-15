@@ -25,9 +25,9 @@ All models folder
 
 Each folder contains one model with small differences in between:
 
-Main Model: Original CNN Architecture (3x3 Kernel size and 2 convolutional layers)
-Variant 1: Added Convolutional Layer (3x3 kernel size and 3 convolutional layers)
-Variant 2: Changed Kernel Size in Convolutional Layers (5x5 kernel size and 2 convolutional layers)
+-Main Model: Original CNN Architecture (3x3 Kernel size and 2 convolutional layers)
+-Variant 1: Added Convolutional Layer (3x3 kernel size and 3 convolutional layers)
+-Variant 2: Changed Kernel Size in Convolutional Layers (5x5 kernel size and 2 convolutional layers)
 
 Each version contain a train_model.py and evaluate_model.py
 
