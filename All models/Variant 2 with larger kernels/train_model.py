@@ -106,7 +106,7 @@ def train_model(model, train_loader, val_loader, criterion, optimizer, num_epoch
     model.train()
     best_val_loss = float('inf')
     no_improvement_cnt = 0
-    epochs_no_improvement = 0
+
     
     # Get the directory where this script is located
     script_dir = os.path.dirname(os.path.abspath(__file__))
