@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 import shutil
 
 # Paths for dataset
-base_dir = r'C:\Users\pierh\assignment1\ProjectAssignmentFS_5\fulldataset'
-output_dir = r'C:\Users\pierh\assignment1\ProjectAssignmentFS_5\data\fulldataset_cleaned'
+base_dir = r'C:\Users\pierh\assignment1\ProjectAssignmentFS_5\fulldataset-part3'
+output_dir = r'C:\Users\pierh\assignment1\ProjectAssignmentFS_5\data\fulldataset_cleaned_part3'
 
 # Ensure the output directory exists
 os.makedirs(output_dir, exist_ok=True)

@@ -90,9 +90,12 @@ def cross_validate_model(dataset, model_class, criterion, optimizer_class, k=10,
     
     all_metrics = {
         'accuracy': [],
-        'precision': [],
-        'recall': [],
-        'f1': [],
+        'macro_precision': [],
+        'micro_precision': [],
+        'macro_recall': [],
+        'micro_recall': [],
+        'macro_f1': [],
+        'micro_f1': [],
         'loss': []
     }
     
@@ -174,22 +177,26 @@ def evaluate_model(model, test_loader, criterion, print_metrics=True):
             total_loss += loss.item()
 
     accuracy = accuracy_score(all_labels, all_preds)
-    precision, recall, f1, _ = precision_recall_fscore_support(all_labels, all_preds, average='macro')
+    precision_macro, recall_macro, f1_macro, _ = precision_recall_fscore_support(all_labels, all_preds, average='macro')
+    precision_micro, recall_micro, f1_micro, _ = precision_recall_fscore_support(all_labels, all_preds, average='micro')
     val_loss = total_loss / len(test_loader)
     
     metrics = {
         'accuracy': accuracy,
-        'precision': precision,
-        'recall': recall,
-        'f1': f1,
+        'macro_precision': precision_macro,
+        'micro_precision': precision_micro,
+        'macro_recall': recall_macro,
+        'micro_recall': recall_micro,
+        'macro_f1': f1_macro,
+        'micro_f1': f1_micro,
         'loss': val_loss
     }
 
     if print_metrics:
         print(f'Accuracy: {accuracy:.4f}')
-        print(f'Precision: {precision:.4f}')
-        print(f'Recall: {recall:.4f}')
-        print(f'F1-score: {f1:.4f}')
+        print(f'Macro Precision: {precision_macro:.4f}, Micro Precision: {precision_micro:.4f}')
+        print(f'Macro Recall: {recall_macro:.4f}, Micro Recall: {recall_micro:.4f}')
+        print(f'Macro F1-score: {f1_macro:.4f}, Micro F1-score: {f1_micro:.4f}')
         print(f'Validation Loss: {val_loss:.4f}')
         
         cm = confusion_matrix(all_labels, all_preds)
