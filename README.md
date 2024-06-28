@@ -76,7 +76,30 @@ Evaluate_model.py:
 - The goal of this script is to evaluate the best_model.pth file on the validation set that was generated using the train_model.py, the train_model generates runs for a certain number of epochs, tests each one on the test set and then chooses the best_model.
 The evaluate_model takes that same best model and tests it on the validation set.
 
+---------------------------------------------------------------------
 
+FOR PART 3
+----------
+- Readme.py : A script that's used to rename the images properly inside each folder
 
+Dataset for PART3:
 
+- The full dataset non-cleaned is in fulldataset-part3
+- The full cleaned dataset is in data/fulldataset_cleaned_part3
+- The dataset for Part3 has been augmented from Part2
+
+Gender_classification 
+- Gender classificationfolder contains the classified folders male,female,young,middle_aged,old
+- Inside each classification folder there's the 4 main classes [Angry,Engaged,Neutral,Happy] and inside these directories are the images that are used for testing and collecting the metrics to fill the tables
+- It's evaluated based on the best_model that was generated with the validation/test/train split using the augmented dataset that's in the ALl models-part3 folder
+
+Bias
+
+- The bias folder contains 3 folders [ 10-15 percent,20-30 percent, 40-50 ]
+- Each folder contains the 4 folders for main classes [Angry, Engaged, Happy, Neutral]
+- Inside each folder the data is classified so that there's a bias for female vs male and there's exactly 50 images per folder
+
+- The 10-15 percent folder contains 28 females vs 22 males
+- The 20-30 percent folder contains 35 females vs 15 males
+- The 40-50 percent folder contains 40 females vs 10 males 
 
